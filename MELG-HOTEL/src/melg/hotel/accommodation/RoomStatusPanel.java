@@ -228,6 +228,12 @@ public class RoomStatusPanel extends JPanel {
         String status = (String) room.get("status");
         double price = (Double) room.get("price");
 
+        // Optional image for the room
+        JLabel imgLabel = createRoomImageLabel(roomNumber);
+        imgLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        card.add(imgLabel);
+        card.add(Box.createVerticalStrut(8));
+
         // Room Number
         JLabel roomNumLabel = new JLabel(roomNumber);
         roomNumLabel.setFont(new Font("SansSerif", Font.BOLD, 14));
@@ -260,7 +266,7 @@ public class RoomStatusPanel extends JPanel {
         card.add(Box.createVerticalStrut(8));
 
         // Price
-        JLabel priceLabel = new JLabel("₦" + String.format("%.0f", price));
+        JLabel priceLabel = new JLabel("Ksh " + String.format("%.0f", price));
         priceLabel.setFont(new Font("SansSerif", Font.PLAIN, 11));
         priceLabel.setForeground(new Color(200, 200, 200));
         priceLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -360,5 +366,33 @@ public class RoomStatusPanel extends JPanel {
             }
         }
         return booked;
+    }
+
+    /**
+     * Attempt to load an image for the given room number. If not found, returns
+     * a placeholder label.
+     */
+    private JLabel createRoomImageLabel(String roomNumber) {
+        JLabel label = new JLabel();
+        label.setPreferredSize(new Dimension(120, 80));
+        try {
+            java.net.URL imgUrl = getClass().getResource("/melg/hotel/images/" + roomNumber + ".jpg");
+            if (imgUrl != null) {
+                ImageIcon icon = new ImageIcon(imgUrl);
+                Image scaled = icon.getImage().getScaledInstance(120, 80, Image.SCALE_SMOOTH);
+                label.setIcon(new ImageIcon(scaled));
+            } else {
+                label.setText("No Image");
+                label.setForeground(Color.WHITE);
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                label.setVerticalAlignment(SwingConstants.CENTER);
+            }
+        } catch (Exception e) {
+            label.setText("No Image");
+            label.setForeground(Color.WHITE);
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+            label.setVerticalAlignment(SwingConstants.CENTER);
+        }
+        return label;
     }
 }

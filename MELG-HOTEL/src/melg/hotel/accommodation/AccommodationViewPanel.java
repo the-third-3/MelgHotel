@@ -184,8 +184,8 @@ public class AccommodationViewPanel extends JPanel {
         roomTypePanel.setBackground(Color.WHITE);
 
         ButtonGroup roomGroup = new ButtonGroup();
-        vipRadio = new JRadioButton("VIP (₦15,000/night)", false);
-        regularRadio = new JRadioButton("Regular (₦8,000/night)", true);
+        vipRadio = new JRadioButton("VIP (Ksh 15,000/night)", false);
+        regularRadio = new JRadioButton("Regular (Ksh 8,000/night)", true);
 
         vipRadio.setBackground(Color.WHITE);
         regularRadio.setBackground(Color.WHITE);
@@ -218,7 +218,7 @@ public class AccommodationViewPanel extends JPanel {
         priceTextLabel.setFont(new Font("SansSerif", Font.BOLD, 16));
         priceTextLabel.setForeground(Color.WHITE);
 
-        totalPriceLabel = new JLabel("₦8,000.00");
+        totalPriceLabel = new JLabel("Ksh 8,000.00");
         totalPriceLabel.setFont(new Font("SansSerif", Font.BOLD, 24));
         totalPriceLabel.setForeground(new Color(229, 218, 195)); // Gold for price amount
 
@@ -247,7 +247,7 @@ public class AccommodationViewPanel extends JPanel {
                             "People: " + numPeople + "\n" +
                             "Room Type: " + roomType + "\n" +
                             "Payment: " + paymentMethod + "\n" +
-                            "Total: " + totalPriceLabel.getText(),
+                            "Total (Ksh): " + totalPriceLabel.getText(),
                     "Booking Confirmation",
                     JOptionPane.INFORMATION_MESSAGE);
         });
