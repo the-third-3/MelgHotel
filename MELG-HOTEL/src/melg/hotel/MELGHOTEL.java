@@ -32,6 +32,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import melg.hotel.accommodation.AccommodationViewPanel;
 
 public class MELGHOTEL extends JFrame {
 
@@ -386,11 +387,7 @@ public class MELGHOTEL extends JFrame {
         public AccommodationView() {
             setLayout(new BorderLayout());
             setBackground(Theme.BG_DARK_GREEN);
-
-            JLabel label = new JLabel("Accommodation / Booking View (Under Construction)", SwingConstants.CENTER);
-            label.setFont(Theme.FONT_HEADER);
-            label.setForeground(Theme.TEXT_GOLD);
-            add(label, BorderLayout.CENTER);
+            add(new AccommodationViewPanel(), BorderLayout.CENTER);
         }
     }
 
