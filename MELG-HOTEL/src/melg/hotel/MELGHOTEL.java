@@ -33,6 +33,8 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import melg.hotel.accommodation.AccommodationViewPanel;
+import javax.swing.JSeparator;
+import javax.swing.ImageIcon;
 
 public class MELGHOTEL extends JFrame {
 
@@ -597,9 +599,34 @@ public class MELGHOTEL extends JFrame {
             order7.setForeground(Theme.BG_DARK_GREEN);
             add(order7);
             
-           
-            
-        
+            ImageIcon icon=new ImageIcon("standard.jpeg");
+           JLabel icona=new JLabel(icon);
+           add(icona);
+           icona.setBounds(510,100,280,120);
+           ImageIcon icon1=new ImageIcon("deluxe.jpeg");
+           JLabel iconb=new JLabel(icon1);
+           add(iconb);
+           iconb.setBounds(510,310,280,120);
+           ImageIcon icon2=new ImageIcon("vip.jpeg");
+           JLabel iconc=new JLabel(icon2);
+           add(iconc);
+           iconc.setBounds(510,520,280,130);
+          ImageIcon icon5=new ImageIcon("breakfast.jpeg");
+           JLabel icond=new JLabel(icon5);
+           add(icond);
+           icond.setBounds(210,100,170,50);
+             ImageIcon icon6=new ImageIcon("lunch.jpeg");
+           JLabel icone=new JLabel(icon6);
+           add(icone);
+           icond.setBounds(210,200,170,50);
+         ImageIcon icon7=new ImageIcon("snacks.jpeg");
+           JLabel iconf=new JLabel(icon7);
+           add(iconf);
+           icond.setBounds(210,380,170,50);
+             ImageIcon icon8=new ImageIcon("dessert.jpeg");
+           JLabel icong=new JLabel(icon8);
+           add(icong);
+           icond.setBounds(210,560,170,50);
         }
     }
 
