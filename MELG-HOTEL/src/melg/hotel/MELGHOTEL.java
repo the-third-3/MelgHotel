@@ -9,6 +9,12 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 /**
+ * Make sure the file AccommodationViewPanel.java exists in the 
+ * package melg.hotel.accommodation or change this import.
+ */
+import melg.hotel.accommodation.AccommodationViewPanel;
+
+/**
  * MELG Hotel Management System
  * Main Entry Point and UI Controller
  */
@@ -36,15 +42,10 @@ public class MELGHOTEL extends JFrame {
         mainContentPanel.setBackground(Theme.BG_DARK_GREEN);
 
         // --- Sidebar (Left Navigation) ---
-        sidebarPanel = new SidebarPanel(new NavigationListener() {
-            @Override
-            public void navigateTo(String viewName) {
-                cardLayout.show(mainContentPanel, viewName);
-            }
-        });
+        sidebarPanel = new SidebarPanel(viewName -> cardLayout.show(mainContentPanel, viewName));
         add(sidebarPanel, BorderLayout.WEST);
 
-        // Add actual cards
+        // Add View Cards (Only one instance per view)
         mainContentPanel.add(new WelcomeView(viewName -> cardLayout.show(mainContentPanel, viewName)), "WelcomeView");
         mainContentPanel.add(new DashboardView(), "DashboardView");
         mainContentPanel.add(new AccommodationView(), "AccommodationView");
@@ -56,7 +57,6 @@ public class MELGHOTEL extends JFrame {
     }
 
     public static void main(String[] args) {
-        // Initialize Database connections/tables
         DatabaseHelper.initDatabase();
 
         EventQueue.invokeLater(() -> {
@@ -79,13 +79,11 @@ public class MELGHOTEL extends JFrame {
         public static final Color PANEL_GREEN = new Color(34, 72, 56);
         public static final Color TEXT_GOLD = new Color(229, 218, 195);
         public static final Color TEXT_WHITE = new Color(245, 245, 245);
-        public static final Color HOVER_GREEN = new Color(45, 90, 70);
         public static final Color BUTTON_GOLD = new Color(229, 218, 195);
         public static final Color BUTTON_TEXT_DARK = new Color(27, 54, 45);
 
         public static final Font FONT_TITLE = new Font("Serif", Font.BOLD, 28);
         public static final Font FONT_HEADER = new Font("Serif", Font.BOLD, 20);
-        public static final Font FONT_REGULAR = new Font("SansSerif", Font.PLAIN, 14);
         public static final Font FONT_BUTTON = new Font("SansSerif", Font.BOLD, 14);
     }
 
@@ -94,7 +92,7 @@ public class MELGHOTEL extends JFrame {
     }
 
     // ========================================================= //
-    // CUSTOM COMPONENTS
+    // CUSTOM UI COMPONENTS
     // ========================================================= //
 
     public static class SidebarButton extends JButton {
@@ -143,6 +141,7 @@ public class MELGHOTEL extends JFrame {
             setPreferredSize(new Dimension(250, 0));
             setLayout(new BorderLayout());
 
+            // Header Logo
             JPanel logoPanel = new JPanel(new BorderLayout());
             logoPanel.setBackground(Theme.PANEL_GREEN);
             logoPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 40, 0));
@@ -152,6 +151,7 @@ public class MELGHOTEL extends JFrame {
             logoPanel.add(logoLabel, BorderLayout.CENTER);
             add(logoPanel, BorderLayout.NORTH);
 
+            // Nav Links
             JPanel linksPanel = new JPanel(new GridLayout(10, 1, 0, 5));
             linksPanel.setBackground(Theme.PANEL_GREEN);
 
@@ -178,10 +178,6 @@ public class MELGHOTEL extends JFrame {
         }
     }
 
-    // ========================================================= //
-    // DATABASE HELPER
-    // ========================================================= //
-
     public static class DatabaseHelper {
         private static final String URL = "jdbc:mysql://localhost:3306/melgHotel";
         private static final String USER = "root";
@@ -191,7 +187,7 @@ public class MELGHOTEL extends JFrame {
             try {
                 Class.forName("com.mysql.cj.jdbc.Driver");
             } catch (ClassNotFoundException e) {
-                try { Class.forName("com.mysql.jdbc.Driver"); } catch (Exception ex) { throw new SQLException("Driver missing"); }
+                try { Class.forName("com.mysql.jdbc.Driver"); } catch (Exception ex) { throw new SQLException("MySQL Driver not found."); }
             }
             return DriverManager.getConnection(URL, USER, PASSWORD);
         }
@@ -201,32 +197,17 @@ public class MELGHOTEL extends JFrame {
                 st.execute("CREATE TABLE IF NOT EXISTS hotel_rooms (id INT AUTO_INCREMENT PRIMARY KEY, room_number VARCHAR(10) UNIQUE, room_type VARCHAR(50), price DOUBLE, status VARCHAR(20) DEFAULT 'Available')");
                 System.out.println("Database Ready.");
             } catch (SQLException e) {
-                System.err.println("Database not connected. Ensure XAMPP/MySQL is running.");
+                System.err.println("Database Offline: " + e.getMessage());
             }
         }
     }
 
     // ========================================================= //
-    // VIEWS (Including placeholders for missing classes)
+    // VIEWS
     // ========================================================= //
 
-    public static class AccommodationView extends JPanel {
-        public AccommodationView() {
-            setLayout(new BorderLayout());
-            setBackground(Theme.BG_DARK_GREEN);
-            // Replaced missing AccommodationViewPanel with a simple placeholder
-            JLabel label = new JLabel("Room Management Content Here", SwingConstants.CENTER);
-            label.setForeground(Theme.TEXT_GOLD);
-            add(label, BorderLayout.CENTER);
-        }
-    }
-
     public static class WelcomeView extends JPanel {
-        private NavigationListener navigationCallback;
-        private Image backgroundImage;
-
         public WelcomeView(NavigationListener navigationCallback) {
-            this.navigationCallback = navigationCallback;
             setLayout(new BorderLayout());
             setBackground(Theme.BG_DARK_GREEN);
             setBorder(new EmptyBorder(50, 50, 50, 50));
@@ -242,6 +223,7 @@ public class MELGHOTEL extends JFrame {
             JButton btn = new JButton("Get Started");
             btn.setPreferredSize(new Dimension(200, 50));
             btn.setBackground(Theme.TEXT_GOLD);
+            btn.setForeground(Theme.BUTTON_TEXT_DARK);
             btn.addActionListener(e -> navigationCallback.navigateTo("AccommodationView"));
             buttonPanel.add(btn);
 
@@ -249,9 +231,59 @@ public class MELGHOTEL extends JFrame {
         }
     }
 
-    // Simple placeholders for other views
-    public static class DashboardView extends JPanel { public DashboardView() { setBackground(Theme.BG_DARK_GREEN); add(new JLabel("Dashboard")).setForeground(Theme.TEXT_GOLD); }}
-    public static class ServicesView extends JPanel { public ServicesView() { setBackground(Theme.BG_DARK_GREEN); add(new JLabel("Services")).setForeground(Theme.TEXT_GOLD); }}
-    public static class MenuView extends JPanel { public MenuView() { setBackground(Theme.BG_DARK_GREEN); add(new JLabel("Menu")).setForeground(Theme.TEXT_GOLD); }}
-    public static class TermsView extends JPanel { public TermsView() { setBackground(Theme.BG_DARK_GREEN); add(new JLabel("Terms")).setForeground(Theme.TEXT_GOLD); }}
+    public static class AccommodationView extends JPanel {
+        public AccommodationView() {
+            setLayout(new BorderLayout());
+            setBackground(Theme.BG_DARK_GREEN);
+            try {
+                // This component must exist in melg.hotel.accommodation
+                add(new AccommodationViewPanel(), BorderLayout.CENTER);
+            } catch (Exception e) {
+                JLabel error = new JLabel("Error loading Accommodation Panel", SwingConstants.CENTER);
+                error.setForeground(Color.RED);
+                add(error);
+            }
+        }
+    }
+
+    // Consolidated Placeholder Views (Removed the duplicates)
+    public static class DashboardView extends JPanel { 
+        public DashboardView() { 
+            setBackground(Theme.BG_DARK_GREEN); 
+            JLabel l = new JLabel("Dashboard View (Under Construction)"); 
+            l.setForeground(Theme.TEXT_GOLD);
+            l.setFont(Theme.FONT_HEADER);
+            add(l); 
+        } 
+    }
+
+    public static class ServicesView extends JPanel { 
+        public ServicesView() { 
+            setBackground(Theme.BG_DARK_GREEN); 
+            JLabel l = new JLabel("Services View (Under Construction)"); 
+            l.setForeground(Theme.TEXT_GOLD);
+            l.setFont(Theme.FONT_HEADER);
+            add(l); 
+        } 
+    }
+
+    public static class MenuView extends JPanel { 
+        public MenuView() { 
+            setBackground(Theme.BG_DARK_GREEN); 
+            JLabel l = new JLabel("Menu View (Under Construction)"); 
+            l.setForeground(Theme.TEXT_GOLD);
+            l.setFont(Theme.FONT_HEADER);
+            add(l); 
+        } 
+    }
+
+    public static class TermsView extends JPanel { 
+        public TermsView() { 
+            setBackground(Theme.BG_DARK_GREEN); 
+            JLabel l = new JLabel("Terms & Conditions"); 
+            l.setForeground(Theme.TEXT_GOLD);
+            l.setFont(Theme.FONT_HEADER);
+            add(l); 
+        } 
+    }
 }
